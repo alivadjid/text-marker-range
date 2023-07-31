@@ -1,8 +1,20 @@
 {
-  "name": "highlighting-text-range",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@alivadjid/text-marker-range",
+  "version": "0.0.1",
   "type": "module",
+  "description": "Hightlight text and save range",
+  "license": "ISC",
+  "author": {
+    "name": "alivadjid",
+    "url": "https://github.com/alivadjid"
+  },
+  "publishConfig": {
+    "@alivadjid:registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alivadjid/text-marker-range.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
