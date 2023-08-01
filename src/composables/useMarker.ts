@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { DATAKEY } from "@/constants";
 import { createRange, defaultCountKey, getMaxDataKey } from "@/helpers";
-import { ENodeName, NewMarker, RangeObject } from "@/interface";
+import { ENodeName, NewMarker, RangeObject } from "../interface";
 
 const materialId = ref();
 const spanColor = ref("");

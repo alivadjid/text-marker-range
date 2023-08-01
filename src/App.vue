@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import TextDataKeyWithExpansion from "@/components/TextDataKeyWithExpansion.vue";
 
-import { NewMarker } from "@/interface";
+import { NewMarker } from "./interface";
 import { storageName } from "@/constants";
 import { loremFirst, loremSecond, loremThird } from "@/fixtures/index";
 

@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 
 import { addHighlightDataKey } from "@/helpers";
-import { NewMarker } from "@/interface";
+import { NewMarker } from "../interface";
 import { useMarker } from "@/composables/useMarker";
 import { DATAKEY } from "@/constants";
 

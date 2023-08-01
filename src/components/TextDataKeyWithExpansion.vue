@@ -5,7 +5,7 @@ import TextDataKey from "@/components/TextDataKey.vue";
 
 import Colors from "@/components/Colors.vue";
 
-import { BookmarkColor, NewMarker } from "@/interface";
+import { BookmarkColor, NewMarker } from "../interface";
 
 import { useMouse } from "@/composables/useMouse";
 import { useMarker } from "@/composables/useMarker";

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { RangeObject } from "@/interface";
+import { RangeObject } from "../interface";
 
 let key: undefined | number;
 
