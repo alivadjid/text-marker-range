@@ -1,15 +1,13 @@
 {
-  "name": "@alivadjid/text-marker-range",
-  "version": "0.0.1",
+  "name": "text-marker-range",
+  "version": "0.0.2",
+  "private": false,
   "type": "module",
   "description": "Hightlight text and save range",
   "license": "ISC",
   "author": {
     "name": "alivadjid",
     "url": "https://github.com/alivadjid"
-  },
-  "publishConfig": {
-    "@alivadjid:registry": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
