@@ -123,6 +123,6 @@ function handleColorChoose(color: BookmarkColor) {
   justify-content: center;
   width: 208px;
   height: 40px;
-  background-color: rgba(0, 0, 0, 60%);
+  background-color: rgba(0, 0, 0, 50%);
 }
 </style>
