@@ -1,6 +1,6 @@
 {
   "name": "text-marker-range",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Hightlight text and save range",
   "author": {
     "name": "alivadjid",
@@ -24,8 +24,9 @@
   "files": [
     "dist/*"
   ],
-  "main": "./dist/text-marker-range.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/text-key-lib.js",
+  "module": "dist/text-key-lib.umd.cjs",
+  "types": "dist/index.d.ts",
   "exports": {
     "./style.css": "./dist/index.css"
   },
