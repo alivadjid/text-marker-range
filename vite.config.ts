@@ -24,9 +24,8 @@ export default defineConfig({
     copyPublicDir: false,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "text-marker-range",
+      name: "vue-text-marker-range",
       fileName: "text-key-lib",
-      // formats: ["es"],
     },
     rollupOptions: {
       external: ["vue"],
