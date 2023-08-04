@@ -10,6 +10,15 @@
     "type": "git",
     "url": "git+https://github.com/alivadjid/text-marker-range.git"
   },
+  "keywords": [
+    "vue3",
+    "text",
+    "hightlight",
+    "marker",
+    "vue",
+    "vuejs",
+    "save-hightlight"
+  ],
   "private": false,
   "type": "module",
   "files": [
@@ -33,6 +42,7 @@
     "types": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "vite-plugin-dts": "^3.5.0",
     "vue": "3.3.4"
   },
   "devDependencies": {
