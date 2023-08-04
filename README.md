@@ -21,11 +21,11 @@
 ```javascript
 <script setup lang="ts">
   import { ref } from "vue";
-  import { TextKey } from "text-marker-range";
+  import { TextKey } from "vue-text-marker-range";
 
-  import type { NewMarker } from "text-marker-range";
+  import type { NewMarker } from "vue-text-marker-range";
 
-  import "text-marker-range/style.css";
+  import "vue-text-marker-range/style.css";
 
   const storageName = "texthighlight";
 
