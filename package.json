@@ -1,6 +1,6 @@
 {
   "name": "text-marker-range",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "Hightlight text and save range",
   "author": {
     "name": "alivadjid",
@@ -28,6 +28,11 @@
   "module": "dist/text-key-lib.umd.cjs",
   "types": "dist/index.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/text-key-lib.js",
+      "require": "./dist/text-key-lib.umd.cjs"
+    },
     "./style.css": "./dist/index.css"
   },
   "license": "ISC",
