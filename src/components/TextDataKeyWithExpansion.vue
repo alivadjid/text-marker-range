@@ -119,10 +119,9 @@ function handleColorChoose(color: BookmarkColor) {
   z-index: 999;
   display: flex;
   gap: 12px;
-  align-items: center;
   justify-content: center;
   width: 208px;
-  height: 40px;
+  height: 35px;
   background-color: rgba(0, 0, 0, 50%);
 }
 </style>
