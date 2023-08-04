@@ -19,14 +19,14 @@ export default defineConfig({
   },
 
   build: {
-    outDir: "dist",
     target: "es2022",
     cssCodeSplit: true,
     copyPublicDir: false,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       name: "TextKey",
-      fileName: "text-key-lib",
+      // fileName: "text-key-lib",
+      formats: ["es"],
     },
     rollupOptions: {
       external: ["vue"],
