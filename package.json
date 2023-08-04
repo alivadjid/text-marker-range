@@ -35,7 +35,7 @@
     },
     "./style.css": "./dist/index.css"
   },
-  "license": "ISC",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
