@@ -2,12 +2,15 @@
 
 ![package-example](https://github.com/alivadjid/text-marker-range/assets/52418132/b79fbd46-fa56-474b-8ecc-4f010a8723c5)
 
+## Props
 
 | Props   | Description    |
 | ------- | -------------- |
 | text    | any text       |
 | textId  | unique text id |
 | markers | saved markers  |
+
+## Emit
 
 | Emit               | Description |
 | ------------------ | ----------- |
