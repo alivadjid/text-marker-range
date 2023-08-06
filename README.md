@@ -2,6 +2,12 @@
 
 ![package-example](https://github.com/alivadjid/text-marker-range/assets/52418132/b79fbd46-fa56-474b-8ecc-4f010a8723c5)
 
+## Install
+
+```
+npm i text-marker-range
+```
+
 ## Props
 
 | Props   | Description    |
