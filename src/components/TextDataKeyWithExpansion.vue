@@ -16,6 +16,8 @@ import type { Marker, MarkerRange, NewMarker } from "../interface";
 
 import { createMarkerFromRange } from "../core/highlight";
 
+defineOptions({ name: "TextHighlighter" });
+
 const emit = defineEmits<{
   handleNewHighlight: [marker: NewMarker];
   handleRemoveHighlight: [marker: MarkerRange];

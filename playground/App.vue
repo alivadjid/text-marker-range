@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  TextKey,
+  TextHighlighter,
   subtractMarkerRange,
   type Marker,
   type MarkerRange,
   type NewMarker,
-} from "vue3-highlight-text-color";
+} from "vue-text-highlighter";
 
 import { loremFirst, loremSecond, loremThird } from "./fixtures";
 
@@ -53,7 +53,7 @@ const markers = getStorage();
 }
 </script>
 <template>
-  <TextKey
+  <TextHighlighter
     v-for="i in 3"
     :text="i === 1 ? loremFirst : i === 2 ? loremSecond : loremThird"
     :textId="i"

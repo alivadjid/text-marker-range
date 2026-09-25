@@ -13,11 +13,20 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     root: isPlaygroundServer ? playgroundRoot : projectRoot,
-    plugins: [vue(), ...(command === "build" ? [dts()] : [])],
+    plugins: [
+      vue(),
+      ...(command === "build"
+        ? [
+            dts({
+              exclude: ["src/**/*.test.ts", "src/composables/**"],
+            }),
+          ]
+        : []),
+    ],
     resolve: {
       alias: {
         "@": path.resolve(projectRoot, "src"),
-        "vue3-highlight-text-color": path.resolve(projectRoot, "src/index.ts"),
+        "vue-text-highlighter": path.resolve(projectRoot, "src/index.ts"),
       },
     },
     server: {
@@ -32,8 +41,8 @@ export default defineConfig(({ command, mode }) => {
             copyPublicDir: false,
             lib: {
               entry: path.resolve(projectRoot, "src/index.ts"),
-              name: "vue-text-marker-range",
-              fileName: "text-key-lib",
+              name: "VueTextHighlighter",
+              fileName: "vue-text-highlighter",
             },
             rollupOptions: {
               external: ["vue"],

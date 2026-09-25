@@ -1,35 +1,40 @@
 {
-  "name": "vue3-highlight-text-color",
-  "version": "0.0.1",
-  "description": "Hightlight text and save range",
+  "name": "vue-text-highlighter",
+  "version": "1.0.0",
+  "description": "Vue 3 component for creating and restoring persistent text highlights.",
   "keywords": [
-    "vue3",
-    "text",
-    "hightlight",
-    "marker",
     "vue",
-    "vuejs",
-    "save-hightlight"
+    "vue3",
+    "text-highlighter",
+    "text-highlight",
+    "text-selection",
+    "annotations",
+    "persistent-highlights"
   ],
   "homepage": "https://github.com/alivadjid/text-marker-range",
   "bugs": "https://github.com/alivadjid/text-marker-range/issues",
   "license": "MIT",
-   "author": {
+  "author": {
     "name": "alivadjid",
     "url": "https://github.com/alivadjid"
-  },
-  "funding": {
-    "type": "patreon",
-    "url": "https://www.patreon.com/user"
   },
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "./dist/index.css"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/text-key-lib.js",
-      "require": "./dist/text-key-lib.umd.cjs"
+      "import": "./dist/vue-text-highlighter.js",
+      "require": "./dist/vue-text-highlighter.umd.cjs"
     },
     "./style.css": "./dist/index.css"
   },
@@ -43,12 +48,20 @@
     "preview": "vite preview",
     "test": "vitest run",
     "types": "vue-tsc --noEmit",
-    "types:playground": "vue-tsc --noEmit -p tsconfig.playground.json"
+    "types:playground": "vue-tsc --noEmit -p tsconfig.playground.json",
+    "changeset": "changeset",
+    "version:packages": "changeset version",
+    "check": "pnpm types && pnpm types:playground && pnpm test && pnpm build",
+    "pack:check": "pnpm pack --dry-run",
+    "prepack": "pnpm build",
+    "prepublishOnly": "pnpm check",
+    "release": "pnpm check && changeset publish"
   },
   "peerDependencies": {
     "vue": "^3.3.4"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@types/node": "^20.0.0",
     "@vitejs/plugin-vue": "4.2.3",
     "@vue/test-utils": "2.4.6",

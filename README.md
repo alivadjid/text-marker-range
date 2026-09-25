@@ -1,106 +1,120 @@
-# Highlighting text and save range.
+# vue-text-highlighter
 
-![package-example](https://github.com/alivadjid/text-marker-range/assets/52418132/b79fbd46-fa56-474b-8ecc-4f010a8723c5)
+A Vue 3 component for selecting text, assigning it a colour, and restoring the
+saved highlights later. Highlight positions are stored as character offsets in
+the source HTML's `textContent`, so the saved data is serializable and does not
+depend on the rendered highlight spans.
 
-## Install
+## Installation
 
+```sh
+pnpm add vue-text-highlighter
 ```
-pnpm add vue3-highlight-text-color
+
+Vue is a peer dependency; install Vue 3 in the consuming application as usual.
+
+## Vue 3 usage
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import {
+  subtractMarkerRange,
+  TextHighlighter,
+  type Marker,
+  type MarkerRange,
+  type NewMarker,
+} from "vue-text-highlighter";
+import "vue-text-highlighter/style.css";
+
+const article = "<p>Select any part of this <strong>HTML text</strong>.</p>";
+const highlights = ref<Marker[]>([]);
+
+function addHighlight(highlight: NewMarker) {
+  highlights.value.push({ ...highlight, id: crypto.randomUUID() });
+}
+
+function removeHighlight(range: MarkerRange) {
+  highlights.value = subtractMarkerRange(highlights.value, range);
+}
+</script>
+
+<template>
+  <TextHighlighter
+    :text="article"
+    :text-id="1"
+    :markers="highlights"
+    :colors="['#99f6e4', '#bae6fd', '#ddd6fe']"
+    @handle-new-highlight="addHighlight"
+    @handle-remove-highlight="removeHighlight"
+  />
+</template>
 ```
 
-## Props
+## API
 
-| Props   | Description    |
-| ------- | -------------- |
-| text    | HTML string with arbitrary DOM content |
-| textId  | unique text id |
-| markers | saved markers  |
-| colors  | optional array of CSS colors for the picker |
+### `TextHighlighter` props
 
-## Emit
+| Prop | Type | Description |
+| --- | --- | --- |
+| `text` | `string` | Source HTML to display and annotate. |
+| `textId` | `number` | Stable identifier of this document. |
+| `markers` | `readonly Marker[]` | Persisted highlights for this and other documents. |
+| `colors` | `readonly string[]` | Optional CSS colours shown in the picker. |
 
-| Emit               | Description |
-| ------------------ | ----------- |
-| handleNewHighlight    | NewMarker   |
-| handleRemoveHighlight | MarkerRange, которую потребитель вычитает из своих маркеров |
+### Events
 
-## Marker format
+| Event | Payload | Description |
+| --- | --- | --- |
+| `handle-new-highlight` | `NewMarker` | Emitted after a user chooses a colour for a selection. Persist it with an `id`. |
+| `handle-remove-highlight` | `MarkerRange` | Emitted for the selected range to remove. |
 
-`NewMarker` is emitted with the selected range expressed as offsets in the
-source HTML's `textContent`:
+### Data types
 
 ```ts
+type TextRange = { start: number; end: number };
+
 type NewMarker = {
   textId: number;
   color: string;
-  range: { start: number; end: number };
+  range: TextRange;
 };
 
 type Marker = NewMarker & { id: string | number };
 type MarkerRange = Pick<NewMarker, "textId" | "range">;
 ```
 
-When ranges overlap, the last marker in `markers` has visual priority over the
-shared text segment. Do not pass untrusted HTML without sanitizing it first.
+When highlights overlap, the last matching item in `markers` has visual
+priority. `subtractMarkerRange(markers, range)` returns a new marker list and
+does not mutate its inputs.
 
-## Usage
+## Compatibility
 
-```javascript
-<script setup lang="ts">
-  import { ref } from "vue";
-  import { subtractMarkerRange, TextKey } from "vue3-highlight-text-color";
+This package is a **Vue 3 UI component**. It requires Vue 3 and a browser DOM;
+it is not directly usable as a React component or as a vanilla JavaScript
+widget. React and non-Vue applications would need a framework-specific adapter
+or a separate headless package. The stored `Marker` format can still be shared
+between such adapters.
 
-  import type {
-    Marker,
-    MarkerRange,
-    NewMarker,
-  } from "vue3-highlight-text-color";
+The package ships ESM, CommonJS, TypeScript declarations, and a separate CSS
+entry point. It targets modern browsers and Node.js 18+ for build tooling.
 
-  import "vue3-highlight-text-color/style.css";
+## Security
 
-  const storageName = "texthighlight";
+`text` is assigned as HTML. Sanitize untrusted content before passing it to the
+component.
 
-  const savedMarkers = ref<Marker[]>([]);
-  const colors = ["#0F766E", "#0EA5E9", "#7C3AED", "#DB2777"];
+## Development and release checks
 
-  import { loremThird } from "./fixture/index"; // any text
-
-  function handleNewHighlight(createdRange: NewMarker) {
-    savedMarkers.value = [
-      ...savedMarkers.value,
-      { ...createdRange, id: crypto.randomUUID() },
-    ];
-    setStorage(savedMarkers.value);
-  }
-
-  function handleRemoveHighlight(removedRange: MarkerRange) {
-    savedMarkers.value = subtractMarkerRange(savedMarkers.value, removedRange);
-    setStorage(savedMarkers.value);
-  }
-
-  function setStorage(item: Marker[]) {
-    localStorage.setItem(storageName, JSON.stringify(item));
-  }
-
-  function getStorage() {
-    return localStorage.getItem(storageName);
-  }
-
-  const markers = getStorage();
-
-  if (markers) {
-    savedMarkers.value = JSON.parse(markers);
-  }
-  </script>
-
-  <template>
-    <TextKey
-      :text="loremThird"
-      :textId="1"
-      :markers="savedMarkers"
-      :colors="colors"
-      @handle-new-highlight="handleNewHighlight"
-      @handle-remove-highlight="handleRemoveHighlight"
-    />
-  </template>
+```sh
+pnpm install
+pnpm check
+pnpm pack:check
 ```
+
+`pnpm check` runs type checks for the library and playground, the test suite,
+and the production build. `pnpm pack:check` previews the exact npm tarball.
+
+## License
+
+[MIT](./LICENSE)

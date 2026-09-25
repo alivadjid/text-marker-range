@@ -66,7 +66,8 @@
 
 - [x] Вынести Vite-демо (`src/main.ts`, `src/App.vue`, fixtures) в `playground/`.
 - [x] Оставить в `src/` только исходники пакета; любой файл в `src/` должен быть частью реализации или публичной сборки компонента.
-- [ ] Синхронизировать имя npm-пакета, инструкции README, metadata репозитория и имена бандлов. Сейчас README использует `text-marker-range`, а `package.json` — `vue3-highlight-text-color`.
+- [x] Синхронизировать имя npm-пакета, инструкции README и имена бандлов: `vue-text-highlighter`.
+- [ ] Переименовать GitHub-репозиторий `text-marker-range` в `vue-text-highlighter`, затем обновить `homepage`, `bugs`, `repository.url` и remote `origin`.
 - [x] Разделить tsconfig для проверки типов и генерации деклараций: `pnpm types` проверяет библиотеку, `pnpm types:playground` — demo-потребитель, а декларации создаёт Vite-плагин только при `pnpm build`.
 - [ ] Явно задать package exports только для утверждённого публичного Vue-компонента, его типов и публичных стилей, если они требуются; осознанно выбрать стратегию ESM/CJS.
 - [x] Перенести Vue в `peerDependencies`, сохранив совместимую dev-зависимость.
