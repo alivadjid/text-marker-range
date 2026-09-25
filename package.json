@@ -2,14 +2,6 @@
   "name": "vue3-highlight-text-color",
   "version": "0.0.1",
   "description": "Hightlight text and save range",
-  "author": {
-    "name": "alivadjid",
-    "url": "https://github.com/alivadjid"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alivadjid/text-marker-range.git"
-  },
   "keywords": [
     "vue3",
     "text",
@@ -19,14 +11,20 @@
     "vuejs",
     "save-hightlight"
   ],
-  "private": false,
-  "type": "module",
-  "files": [
+  "homepage": "https://github.com/alivadjid/text-marker-range",
+  "bugs": "https://github.com/alivadjid/text-marker-range/issues",
+  "license": "MIT",
+   "author": {
+    "name": "alivadjid",
+    "url": "https://github.com/alivadjid"
+  },
+  "funding": {
+    "type": "patreon",
+    "url": "https://www.patreon.com/user"
+  },
+   "files": [
     "dist/*"
   ],
-  "main": "dist/text-key-lib.js",
-  "module": "dist/text-key-lib.umd.cjs",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -35,12 +33,22 @@
     },
     "./style.css": "./dist/index.css"
   },
-  "license": "MIT",
+  "main": "dist/text-key-lib.js",
+  "directories": {
+    "lib": "dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alivadjid/text-marker-range.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
     "preview": "vite preview",
     "types": "vue-tsc --noEmit"
+  },
+  "config": {
+    "port": 8080
   },
   "dependencies": {
     "vite-plugin-dts": "^3.5.0",
@@ -50,8 +58,13 @@
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-sucrase": "^5.0.1",
     "@vitejs/plugin-vue": "4.2.3",
+    "sass": "^1.81.0",
     "typescript": "5.1.6",
     "vite": "4.4.8",
     "vue-tsc": "1.8.8"
-  }
+  },
+  "private": false,
+  "type": "module",
+  "module": "dist/text-key-lib.umd.cjs",
+  "types": "dist/index.d.ts"
 }
