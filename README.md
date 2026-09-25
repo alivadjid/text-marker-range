@@ -15,12 +15,14 @@ pnpm add vue3-highlight-text-color
 | text    | HTML string with arbitrary DOM content |
 | textId  | unique text id |
 | markers | saved markers  |
+| colors  | optional array of CSS colors for the picker |
 
 ## Emit
 
 | Emit               | Description |
 | ------------------ | ----------- |
-| handleNewHighlight | NewMarker   |
+| handleNewHighlight    | NewMarker   |
+| handleRemoveHighlight | MarkerRange |
 
 ## Marker format
 
@@ -35,6 +37,7 @@ type NewMarker = {
 };
 
 type Marker = NewMarker & { id: string | number };
+type MarkerRange = Pick<NewMarker, "textId" | "range">;
 ```
 
 When ranges overlap, the last marker in `markers` has visual priority over the
@@ -54,6 +57,7 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
   const storageName = "texthighlight";
 
   const savedMarkers = ref<Marker[]>([]);
+  const colors = ["#0F766E", "#0EA5E9", "#7C3AED", "#DB2777"];
 
   import { loremThird } from "./fixture/index"; // any text
 
@@ -62,6 +66,16 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
       ...savedMarkers.value,
       { ...createdRange, id: crypto.randomUUID() },
     ];
+    setStorage(savedMarkers.value);
+  }
+
+  function handleRemoveHighlight(removedRange: MarkerRange) {
+    savedMarkers.value = savedMarkers.value.filter(
+      (marker) =>
+        marker.textId !== removedRange.textId ||
+        marker.range.start >= removedRange.range.end ||
+        removedRange.range.start >= marker.range.end,
+    );
     setStorage(savedMarkers.value);
   }
 
@@ -85,7 +99,9 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
       :text="loremThird"
       :textId="1"
       :markers="savedMarkers"
+      :colors="colors"
       @handleNewHighlight="handleNewHighlight"
+      @handleRemoveHighlight="handleRemoveHighlight"
     />
   </template>
 ```

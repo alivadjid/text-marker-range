@@ -7,10 +7,13 @@ export interface TextRange {
   end: number;
 }
 
-export interface NewMarker {
-  color: string;
+export interface MarkerRange {
   range: TextRange;
   textId: number;
+}
+
+export interface NewMarker extends MarkerRange {
+  color: string;
 }
 
 export interface Marker extends NewMarker {
