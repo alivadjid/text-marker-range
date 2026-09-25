@@ -60,6 +60,48 @@ export function createMarkerFromRange(
   return isTextRange(range) ? { color, range, textId } : undefined;
 }
 
+/**
+ * Removes a range from persisted markers without mutating the input. A marker
+ * cut through its middle becomes two markers that retain its color and textId.
+ */
+export function subtractMarkerRange(
+  markers: readonly Marker[],
+  removed: { textId: number; range: TextRange }
+): Marker[] {
+  if (!isTextRange(removed.range)) return [...markers];
+
+  return markers.flatMap((marker) => {
+    if (
+      marker.textId !== removed.textId ||
+      marker.range.end <= removed.range.start ||
+      removed.range.end <= marker.range.start
+    ) {
+      return [marker];
+    }
+
+    const before = marker.range.start < removed.range.start;
+    const after = removed.range.end < marker.range.end;
+    const result: Marker[] = [];
+
+    if (before) {
+      result.push({
+        ...marker,
+        range: { start: marker.range.start, end: removed.range.start },
+      });
+    }
+
+    if (after) {
+      result.push({
+        ...marker,
+        id: `${marker.id}:after:${removed.range.end}`,
+        range: { start: removed.range.end, end: marker.range.end },
+      });
+    }
+
+    return result;
+  });
+}
+
 function isValidMarker(
   marker: unknown,
   textId: number,

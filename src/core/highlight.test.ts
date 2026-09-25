@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   createMarkerFromRange,
   renderMarkers,
+  subtractMarkerRange,
 } from "./highlight";
 
 function createRoot(source: string) {
@@ -93,5 +94,45 @@ describe("highlight core", () => {
     renderMarkers(root, "hello", markers, 1);
 
     expect(root.innerHTML).toBe("hello");
+  });
+
+  it("splits a marker when only its inner range is removed", () => {
+    const markers = [
+      {
+        id: "whole",
+        textId: 1,
+        color: "#0F766E",
+        range: { start: 1, end: 8 },
+      },
+      {
+        id: "other-document",
+        textId: 2,
+        color: "#0F766E",
+        range: { start: 1, end: 8 },
+      },
+    ];
+
+    expect(
+      subtractMarkerRange(markers, { textId: 1, range: { start: 3, end: 6 } })
+    ).toEqual([
+      {
+        id: "whole",
+        textId: 1,
+        color: "#0F766E",
+        range: { start: 1, end: 3 },
+      },
+      {
+        id: "whole:after:6",
+        textId: 1,
+        color: "#0F766E",
+        range: { start: 6, end: 8 },
+      },
+      {
+        id: "other-document",
+        textId: 2,
+        color: "#0F766E",
+        range: { start: 1, end: 8 },
+      },
+    ]);
   });
 });

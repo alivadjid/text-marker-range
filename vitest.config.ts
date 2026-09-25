@@ -8,10 +8,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+      "vue3-highlight-text-color": path.resolve(__dirname, "src/index.ts"),
     },
   },
   test: {
     environment: "happy-dom",
-    include: ["src/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "playground/**/*.test.ts"],
   },
 });

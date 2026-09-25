@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import {
   TextKey,
+  subtractMarkerRange,
   type Marker,
   type MarkerRange,
   type NewMarker,
@@ -32,16 +33,8 @@ function handleNewHighlight(createdRange: NewMarker) {
   setStorage(savedMarkers.value);
 }
 
-function rangesIntersect(first: MarkerRange["range"], second: MarkerRange["range"]) {
-  return first.start < second.end && second.start < first.end;
-}
-
 function handleRemoveHighlight(removedRange: MarkerRange) {
-  savedMarkers.value = savedMarkers.value.filter(
-    (marker) =>
-      marker.textId !== removedRange.textId ||
-      !rangesIntersect(marker.range, removedRange.range)
-  );
+  savedMarkers.value = subtractMarkerRange(savedMarkers.value, removedRange);
   setStorage(savedMarkers.value);
 }
 
@@ -66,8 +59,8 @@ const markers = getStorage();
     :textId="i"
     :markers="savedMarkers"
     :colors="playgroundColors"
-    @handleNewHighlight="handleNewHighlight"
-    @handleRemoveHighlight="handleRemoveHighlight"
+    @handle-new-highlight="handleNewHighlight"
+    @handle-remove-highlight="handleRemoveHighlight"
   />
 </template>
 

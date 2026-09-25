@@ -22,7 +22,7 @@ pnpm add vue3-highlight-text-color
 | Emit               | Description |
 | ------------------ | ----------- |
 | handleNewHighlight    | NewMarker   |
-| handleRemoveHighlight | MarkerRange |
+| handleRemoveHighlight | MarkerRange, которую потребитель вычитает из своих маркеров |
 
 ## Marker format
 
@@ -48,9 +48,13 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
 ```javascript
 <script setup lang="ts">
   import { ref } from "vue";
-  import { TextKey } from "vue3-highlight-text-color";
+  import { subtractMarkerRange, TextKey } from "vue3-highlight-text-color";
 
-  import type { Marker, NewMarker } from "vue3-highlight-text-color";
+  import type {
+    Marker,
+    MarkerRange,
+    NewMarker,
+  } from "vue3-highlight-text-color";
 
   import "vue3-highlight-text-color/style.css";
 
@@ -70,12 +74,7 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
   }
 
   function handleRemoveHighlight(removedRange: MarkerRange) {
-    savedMarkers.value = savedMarkers.value.filter(
-      (marker) =>
-        marker.textId !== removedRange.textId ||
-        marker.range.start >= removedRange.range.end ||
-        removedRange.range.start >= marker.range.end,
-    );
+    savedMarkers.value = subtractMarkerRange(savedMarkers.value, removedRange);
     setStorage(savedMarkers.value);
   }
 
@@ -100,8 +99,8 @@ shared text segment. Do not pass untrusted HTML without sanitizing it first.
       :textId="1"
       :markers="savedMarkers"
       :colors="colors"
-      @handleNewHighlight="handleNewHighlight"
-      @handleRemoveHighlight="handleRemoveHighlight"
+      @handle-new-highlight="handleNewHighlight"
+      @handle-remove-highlight="handleRemoveHighlight"
     />
   </template>
 ```
