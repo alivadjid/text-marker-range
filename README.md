@@ -5,14 +5,14 @@
 ## Install
 
 ```
-npm i text-marker-range
+pnpm add vue3-highlight-text-color
 ```
 
 ## Props
 
 | Props   | Description    |
 | ------- | -------------- |
-| text    | any text       |
+| text    | HTML string with arbitrary DOM content |
 | textId  | unique text id |
 | markers | saved markers  |
 
@@ -22,37 +22,50 @@ npm i text-marker-range
 | ------------------ | ----------- |
 | handleNewHighlight | NewMarker   |
 
+## Marker format
+
+`NewMarker` is emitted with the selected range expressed as offsets in the
+source HTML's `textContent`:
+
+```ts
+type NewMarker = {
+  textId: number;
+  color: string;
+  range: { start: number; end: number };
+};
+
+type Marker = NewMarker & { id: string | number };
+```
+
+When ranges overlap, the last marker in `markers` has visual priority over the
+shared text segment. Do not pass untrusted HTML without sanitizing it first.
+
 ## Usage
 
 ```javascript
 <script setup lang="ts">
   import { ref } from "vue";
-  import { TextKey } from "text-marker-range";
+  import { TextKey } from "vue3-highlight-text-color";
 
-  import type { NewMarker } from "text-marker-range";
+  import type { Marker, NewMarker } from "vue3-highlight-text-color";
 
-  import "text-marker-range/style.css";
+  import "vue3-highlight-text-color/style.css";
 
   const storageName = "texthighlight";
 
-  type savedHighlight = Required<NewMarker>;
-  const savedMarkers = ref<savedHighlight[]>([]);
+  const savedMarkers = ref<Marker[]>([]);
 
   import { loremThird } from "./fixture/index"; // any text
 
   function handleNewHighlight(createdRange: NewMarker) {
-    const markers = getStorage();
-
-    if (markers) {
-      const parseHighlights = JSON.parse(markers);
-      parseHighlights.push({ ...createdRange, id: Date.now() });
-      setStorage(parseHighlights);
-    } else {
-      setStorage([{ ...createdRange, id: Date.now() }]);
-    }
+    savedMarkers.value = [
+      ...savedMarkers.value,
+      { ...createdRange, id: crypto.randomUUID() },
+    ];
+    setStorage(savedMarkers.value);
   }
 
-  function setStorage(item: NewMarker[]) {
+  function setStorage(item: Marker[]) {
     localStorage.setItem(storageName, JSON.stringify(item));
   }
 

@@ -1,49 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 
-import { addHighlightDataKey } from "@/helpers";
-import { NewMarker } from "../interface";
-import { useMarker } from "@/composables/useMarker";
-import { DATAKEY } from "@/constants";
+import { renderMarkers } from "../core/highlight";
+import type { Marker } from "../interface";
 
-const {
-  text = "",
-  textId = 1,
-  markers = [],
-} = defineProps(["text", "textId", "markers"]);
+const props = withDefaults(
+  defineProps<{
+    text: string;
+    textId: number;
+    markers?: readonly Marker[];
+  }>(),
+  { markers: () => [] }
+);
 
-const textWithHighlightDataKey = ref();
-textWithHighlightDataKey.value = addHighlightDataKey(text, textId);
+const element = ref<HTMLElement>();
 
-onMounted(() => {
-  const parser = new DOMParser();
+async function render() {
+  await nextTick();
+  if (!element.value) return;
+  renderMarkers(element.value, props.text, props.markers, props.textId);
+}
 
-  const dom = parser.parseFromString(
-    textWithHighlightDataKey.value,
-    "text/html"
-  );
+onMounted(render);
+watch(() => [props.text, props.markers] as const, render, { deep: true });
 
-  dom.body.dataset.highlightKey = String(textId);
-  let exitDom: Document | undefined;
-
-  markers.forEach((marker: NewMarker) => {
-    if (marker.color) {
-      useMarker({ color: marker.color, id: Number(textId) }, marker, dom);
-      exitDom = dom;
-    }
-  });
-
-  if (!exitDom) return;
-  const childNodes = Array.from(exitDom.body.childNodes);
-
-  document
-    .querySelector(`[${DATAKEY}="${textId}"]`)
-    ?.replaceChildren(...childNodes);
-});
+defineExpose({ element });
 </script>
 
 <template>
-  <div v-html="textWithHighlightDataKey" :textId="textId"></div>
+  <div ref="element"></div>
 </template>
 
 <style></style>

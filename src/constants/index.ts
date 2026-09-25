@@ -1,5 +1,3 @@
-export const DATAKEY = "data-highlight-key";
-
 export const MARKER_COLOR_LIST = [
   "#4C1E4F",
   "#B5A886",

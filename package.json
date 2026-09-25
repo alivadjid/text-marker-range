@@ -22,8 +22,8 @@
     "type": "patreon",
     "url": "https://www.patreon.com/user"
   },
-   "files": [
-    "dist/*"
+  "files": [
+    "dist"
   ],
   "exports": {
     ".": {
@@ -33,38 +33,34 @@
     },
     "./style.css": "./dist/index.css"
   },
-  "main": "dist/text-key-lib.js",
-  "directories": {
-    "lib": "dist"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alivadjid/text-marker-range.git"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly",
+    "build": "pnpm types && vite build",
     "preview": "vite preview",
-    "types": "vue-tsc --noEmit"
+    "test": "vitest run",
+    "types": "vue-tsc --noEmit",
+    "types:playground": "vue-tsc --noEmit -p tsconfig.playground.json"
   },
-  "config": {
-    "port": 8080
-  },
-  "dependencies": {
-    "vite-plugin-dts": "^3.5.0",
-    "vue": "3.3.4"
+  "peerDependencies": {
+    "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.1.0",
-    "@rollup/plugin-sucrase": "^5.0.1",
+    "@types/node": "^20.0.0",
     "@vitejs/plugin-vue": "4.2.3",
+    "happy-dom": "^14.12.3",
     "sass": "^1.81.0",
     "typescript": "5.1.6",
     "vite": "4.4.8",
+    "vite-plugin-dts": "^3.5.0",
+    "vitest": "^1.6.1",
+    "vue": "3.3.4",
     "vue-tsc": "1.8.8"
   },
   "private": false,
   "type": "module",
-  "module": "dist/text-key-lib.umd.cjs",
-  "types": "dist/index.d.ts"
+  "packageManager": "pnpm@11.26.0"
 }

@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref, shallowRef } from "vue";
 
 import TextDataKey from "@/components/TextDataKey.vue";
 
 import Colors from "@/components/Colors.vue";
 
-import { BookmarkColor, NewMarker } from "../interface";
+import type { BookmarkColor, Marker, NewMarker } from "../interface";
 
 import { useMouse } from "@/composables/useMouse";
-import { useMarker } from "@/composables/useMarker";
+import { createMarkerFromRange } from "../core/highlight";
 
-const emit = defineEmits(["handleNewHighlight"]);
+const emit = defineEmits<{
+  handleNewHighlight: [marker: NewMarker];
+}>();
 const props = defineProps<{
-  markers: NewMarker[];
+  markers: readonly Marker[];
   text: string;
   textId: number;
 }>();
@@ -26,6 +28,11 @@ const mouseItemMove = ref(false);
 const mouseItemUp = ref(false);
 
 const textId = ref();
+const textDataKey = ref<InstanceType<typeof TextDataKey>>();
+const selectedRange = shallowRef<Range>();
+const markersForText = computed(() =>
+  props.markers.filter((marker) => marker.textId === props.textId)
+);
 const snackbarx = ref();
 const snackbary = ref();
 const timer = 3000;
@@ -40,8 +47,15 @@ function onItemMouseMove() {
 
 function onItemMouseUp(id: number) {
   if (mouseItemDown.value && mouseItemMove.value) {
-    mouseItemUp.value = true;
-    handleTextChoose(id);
+    const selection = window.getSelection();
+    const range = selection?.rangeCount ? selection.getRangeAt(0) : undefined;
+    const root = textDataKey.value?.element;
+
+    if (range && root && root.contains(range.commonAncestorContainer) && !range.collapsed) {
+      selectedRange.value = range.cloneRange();
+      mouseItemUp.value = true;
+      handleTextChoose(id);
+    }
   }
   mouseItemDown.value = false;
   mouseItemMove.value = false;
@@ -78,10 +92,15 @@ function defaultSnackBar() {
 }
 
 function handleColorChoose(color: BookmarkColor) {
-  const newBookmark = useMarker({ color, id: textId.value });
+  const root = textDataKey.value?.element;
+  const range = selectedRange.value;
+  if (!root || !range || textId.value === undefined) return;
+
+  const newBookmark = createMarkerFromRange(root, range, color, textId.value);
 
   if (newBookmark) {
     isShowSnack.value = false;
+    selectedRange.value = undefined;
     emit("handleNewHighlight", newBookmark);
   }
 }
@@ -89,14 +108,11 @@ function handleColorChoose(color: BookmarkColor) {
 
 <template>
   <TextDataKey
+    ref="textDataKey"
     :text="props.text"
     :textId="props.textId"
     :data-highlight-key="props.textId"
-    :markers="
-      props.markers
-        .filter((marker) => marker.textId === props.textId)
-        .sort((a, b) => (a > b ? 1 : -1))
-    "
+    :markers="markersForText"
     @mousedown="onItemMouseDown"
     @mousemove="onItemMouseMove"
     @mouseup.prevent="() => onItemMouseUp(props.textId)"

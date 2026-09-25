@@ -1,24 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import TextDataKeyWithExpansion from "@/components/TextDataKeyWithExpansion.vue";
+import {
+  TextKey,
+  type Marker,
+  type NewMarker,
+} from "vue3-highlight-text-color";
 
-import { NewMarker } from "../src/interface";
-import { storageName } from "@/constants";
-import { loremFirst, loremSecond, loremThird } from "@/fixtures/index";
+import { loremFirst, loremSecond, loremThird } from "./fixtures";
 
-type savedHighlight = Required<NewMarker>;
-const savedMarkers = ref<savedHighlight[]>([]);
+const storageName = "texthighlight";
+const savedMarkers = ref<Marker[]>([]);
 
 function handleNewHighlight(createdRange: NewMarker) {
-  const markers = getStorage();
-
-  if (markers) {
-    const parseHighlights = JSON.parse(markers);
-    parseHighlights.push({ ...createdRange, id: Date.now() });
-    setStorage(parseHighlights);
-  } else {
-    setStorage([{ ...createdRange, id: Date.now() }]);
-  }
+  const nextMarker = { ...createdRange, id: Date.now() };
+  savedMarkers.value = [...savedMarkers.value, nextMarker];
+  setStorage(savedMarkers.value);
 }
 
 function setStorage(item: NewMarker[]) {
@@ -31,12 +27,12 @@ function getStorage() {
 
 const markers = getStorage();
 
-if (markers) {
+  if (markers) {
   savedMarkers.value = JSON.parse(markers);
 }
 </script>
 <template>
-  <TextDataKeyWithExpansion
+  <TextKey
     v-for="i in 3"
     :text="i === 1 ? loremFirst : i === 2 ? loremSecond : loremThird"
     :textId="i"
