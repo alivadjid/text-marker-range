@@ -28,7 +28,7 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(projectRoot, "src"),
-        "vue-text-highlighter": path.resolve(projectRoot, "src/index.ts"),
+        "vue3-highlight-text-color": path.resolve(projectRoot, "src/index.ts"),
       },
     },
     server: {
@@ -44,7 +44,7 @@ export default defineConfig(({ command, mode }) => {
             lib: {
               entry: path.resolve(projectRoot, "src/index.ts"),
               name: "VueTextHighlighter",
-              fileName: "vue-text-highlighter",
+              fileName: "vue3-highlight-text-color",
             },
             rollupOptions: {
               external: ["vue"],

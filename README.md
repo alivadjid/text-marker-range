@@ -1,4 +1,4 @@
-# vue-text-highlighter
+# vue3-highlight-text-color
 
 A Vue 3 component for selecting text, assigning it a colour, and restoring the
 saved highlights later. Highlight positions are stored as character offsets in
@@ -8,7 +8,7 @@ depend on the rendered highlight spans.
 ## Installation
 
 ```sh
-pnpm add vue-text-highlighter
+pnpm add vue3-highlight-text-color
 ```
 
 Vue is a peer dependency; install Vue 3 in the consuming application as usual.
@@ -24,8 +24,8 @@ import {
   type Marker,
   type MarkerRange,
   type NewMarker,
-} from "vue-text-highlighter";
-import "vue-text-highlighter/style.css";
+} from "vue3-highlight-text-color";
+import "vue3-highlight-text-color/style.css";
 
 const article = "<p>Select any part of this <strong>HTML text</strong>.</p>";
 const highlights = ref<Marker[]>([]);

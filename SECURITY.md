@@ -3,7 +3,7 @@
 ## Supported versions
 
 Security fixes are provided for the latest published version of
-`vue-text-highlighter`.
+`vue3-highlight-text-color`.
 
 ## Reporting a vulnerability
 
