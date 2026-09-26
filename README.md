@@ -97,7 +97,8 @@ or a separate headless package. The stored `Marker` format can still be shared
 between such adapters.
 
 The package ships ESM, CommonJS, TypeScript declarations, and a separate CSS
-entry point. It targets modern browsers and Node.js 18+ for build tooling.
+entry point. It targets modern browsers and requires Node.js 22.13.0+ for
+development and build tooling.
 
 ## Security
 
@@ -116,6 +117,13 @@ pnpm pack:check
 `pnpm dev` starts the playground at `http://localhost:5173`. `pnpm check` runs
 type checks for the library and playground, the test suite, and the production
 build. `pnpm pack:check` previews the exact npm tarball.
+
+## Project resources
+
+- [Live playground](https://alivadjid.github.io/text-marker-range/)
+- [Contributing guide](./CONTRIBUTING.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Security policy](./SECURITY.md)
 
 ## License
 

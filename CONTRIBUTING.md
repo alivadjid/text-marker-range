@@ -20,7 +20,7 @@ empty Changeset when appropriate.
 
 ## Local verification
 
-Use Node.js 22.13 or newer and the pnpm version pinned in `package.json`.
+Use Node.js 22.13.0 or newer and the pnpm version pinned in `package.json`.
 
 ```sh
 pnpm install
