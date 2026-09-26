@@ -17,6 +17,38 @@ afterEach(() => {
 });
 
 describe("TextDataKeyWithExpansion", () => {
+  it("teleports the color palette outside the text document", async () => {
+    const wrapper = mount(TextDataKeyWithExpansion, {
+      attachTo: document.body,
+      props: {
+        text: "<p>Hello world</p>",
+        textId: 1,
+        markers: [],
+      },
+    });
+
+    await settle();
+
+    const textRoot = wrapper.findComponent(TextDataKey).element;
+    const textNode = textRoot.querySelector("p")?.firstChild;
+    const range = document.createRange();
+    range.setStart(textNode!, 0);
+    range.setEnd(textNode!, 5);
+    window.getSelection()?.removeAllRanges();
+    window.getSelection()?.addRange(range);
+
+    const textDataKey = wrapper.findComponent(TextDataKey);
+    await textDataKey.trigger("mousedown");
+    await textDataKey.trigger("mousemove");
+    await textDataKey.trigger("mouseup");
+    await settle();
+
+    const menu = document.body.querySelector('[role="dialog"]');
+    expect(menu).not.toBeNull();
+    expect(textRoot.contains(menu)).toBe(false);
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+  });
+
   it("emits a marker after selecting text and choosing a color", async () => {
     const wrapper = mount(TextDataKeyWithExpansion, {
       attachTo: document.body,

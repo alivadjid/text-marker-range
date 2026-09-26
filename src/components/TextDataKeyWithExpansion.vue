@@ -187,24 +187,22 @@ onBeforeUnmount(() => {
     @mouseup.prevent="() => onItemMouseUp(props.textId)"
   />
 
-  <div v-if="isShowSnack">
-    <Teleport to="body">
-      <div
-        ref="colorMenu"
-        :class="$style.colorMenu"
-        role="dialog"
-        aria-label="Выбор цвета выделения"
-        @pointerenter="clearCloseTimer"
-        @pointerleave="startCloseTimer"
-      >
-        <Colors
-          :colors="props.colors"
-          @colorChoose="handleColorChoose"
-          @remove="handleRemoveHighlight"
-        />
-      </div>
-    </Teleport>
-  </div>
+  <Teleport v-if="isShowSnack" to="body">
+    <div
+      ref="colorMenu"
+      :class="$style.colorMenu"
+      role="dialog"
+      aria-label="Выбор цвета выделения"
+      @pointerenter="clearCloseTimer"
+      @pointerleave="startCloseTimer"
+    >
+      <Colors
+        :colors="props.colors"
+        @colorChoose="handleColorChoose"
+        @remove="handleRemoveHighlight"
+      />
+    </div>
+  </Teleport>
 </template>
 
 <style module lang="scss">
