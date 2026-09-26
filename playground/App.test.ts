@@ -45,6 +45,47 @@ describe("playground highlight removal", () => {
     );
   });
 
+  it("lists and clears saved ranges in a teleported drawer", async () => {
+    localStorage.setItem(
+      "texthighlight",
+      JSON.stringify([
+        {
+          id: "first-range",
+          color: "#0F766E",
+          range: { start: 0, end: 5 },
+          textId: 1,
+        },
+        {
+          id: "second-range",
+          color: "#2563EB",
+          range: { start: 8, end: 13 },
+          textId: 2,
+        },
+      ])
+    );
+
+    const wrapper = mount(App, { attachTo: document.body });
+    await settle();
+
+    await wrapper.get('button[aria-controls="saved-ranges-panel"]').trigger("click");
+    await settle();
+
+    const drawer = document.body.querySelector('[role="dialog"]');
+    expect(drawer?.textContent).toContain("Saved ranges");
+    expect(drawer?.textContent).toContain("Text 1");
+    expect(drawer?.textContent).toContain("Range 0–5");
+    expect(drawer?.textContent).toContain("Text 3");
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+
+    (drawer?.querySelector('button:not([aria-label])') as HTMLButtonElement)?.click();
+    await settle();
+
+    expect(localStorage.getItem("texthighlight")).toBeNull();
+    expect(document.body.querySelector('[role="dialog"]')?.textContent).toContain(
+      "No saved ranges yet."
+    );
+  });
+
   it("removes persisted markers that intersect the selected range", async () => {
     localStorage.setItem(
       "texthighlight",
