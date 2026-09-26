@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
   TextHighlighter,
   subtractMarkerRange,
@@ -26,26 +26,75 @@ const playgroundColors = [
   "#334155",
   "#FFFFFF",
 ];
+type Locale = "ru" | "en";
+
+const locale = ref<Locale>("en");
+const copy = computed(() =>
+  locale.value === "ru"
+    ? {
+        languageLabel: "Язык интерфейса",
+        switchToRussian: "Переключить на русский",
+        switchToEnglish: "Switch to English",
+        title: "Три независимых документа",
+        notice:
+          "Выделение, выбор цвета и удаление работают только внутри одного блока. Не начинайте выделение в одном документе и не заканчивайте в другом.",
+        document: "Документ",
+        examples: [
+          {
+            title: "Параграф 1 — базовое выделение",
+            description:
+              "Выделите часть обычного текста, выберите цвет и обновите страницу: сохранённое выделение будет восстановлено.",
+          },
+          {
+            title: "Параграф 2 — списки и вложенная разметка",
+            description:
+              "Выделения сохраняются по текстовым позициям, поэтому работают внутри элементов списка и другой вложенной HTML-разметки.",
+          },
+          {
+            title: "Параграф 3 — несколько абзацев в одном документе",
+            description:
+              "Внутри этого блока можно начать выделение в одном абзаце или списке и закончить в другом: это один TextHighlighter и один textId.",
+          },
+        ],
+      }
+    : {
+        languageLabel: "Interface language",
+        switchToRussian: "Switch to Russian",
+        switchToEnglish: "Switch to English",
+        title: "Three independent documents",
+        notice:
+          "Selecting, colouring, and removing highlights work only within one document. Do not start a selection in one document and finish it in another.",
+        document: "Document",
+        examples: [
+          {
+            title: "Paragraph 1 — basic highlighting",
+            description:
+              "Select ordinary text, choose a colour, and refresh the page: the saved highlight will be restored.",
+          },
+          {
+            title: "Paragraph 2 — lists and nested markup",
+            description:
+              "Highlights are saved as text offsets, so they work inside list items and other nested HTML markup.",
+          },
+          {
+            title: "Paragraph 3 — multiple paragraphs in one document",
+            description:
+              "Within this block, a selection can start in one paragraph or list and end in another: it is one TextHighlighter with one textId.",
+          },
+        ],
+      }
+);
 const examples = [
   {
     id: 1,
-    title: "Параграф 1 — базовое выделение",
-    description:
-      "Выделите часть обычного текста, выберите цвет и обновите страницу: сохранённое выделение будет восстановлено.",
     text: loremFirst,
   },
   {
     id: 2,
-    title: "Параграф 2 — списки и вложенная разметка",
-    description:
-      "Выделения сохраняются по текстовым позициям, поэтому работают внутри элементов списка и другой вложенной HTML-разметки.",
     text: loremSecond,
   },
   {
     id: 3,
-    title: "Параграф 3 — несколько абзацев в одном документе",
-    description:
-      "Внутри этого блока можно начать выделение в одном абзаце или списке и закончить в другом: это один TextHighlighter и один textId.",
     text: loremThird,
   },
 ];
@@ -78,12 +127,31 @@ if (markers) {
 <template>
   <main :class="$style.playground">
     <header :class="$style.header">
-      <p :class="$style.eyebrow">Vue Text Highlighter</p>
-      <h1>Три независимых документа</h1>
-      <p :class="$style.notice">
-        Выделение, выбор цвета и удаление работают только внутри одного блока.
-        Не начинайте выделение в одном документе и не заканчивайте в другом.
-      </p>
+      <div :class="$style.headerTopline">
+        <p :class="$style.eyebrow">Vue Text Highlighter</p>
+        <div :class="$style.languageSwitcher" :aria-label="copy.languageLabel">
+          <button
+            type="button"
+            :class="[$style.languageButton, { [$style.activeLanguage]: locale === 'ru' }]"
+            :aria-label="copy.switchToRussian"
+            :aria-pressed="locale === 'ru'"
+            @click="locale = 'ru'"
+          >
+            RU
+          </button>
+          <button
+            type="button"
+            :class="[$style.languageButton, { [$style.activeLanguage]: locale === 'en' }]"
+            :aria-label="copy.switchToEnglish"
+            :aria-pressed="locale === 'en'"
+            @click="locale = 'en'"
+          >
+            EN
+          </button>
+        </div>
+      </div>
+      <h1>{{ copy.title }}</h1>
+      <p :class="$style.notice">{{ copy.notice }}</p>
     </header>
 
     <section
@@ -93,9 +161,11 @@ if (markers) {
       :aria-labelledby="`example-${example.id}`"
     >
       <header :class="$style.exampleHeader">
-        <p :class="$style.documentId">Документ {{ example.id }}</p>
-        <h2 :id="`example-${example.id}`">{{ example.title }}</h2>
-        <p>{{ example.description }}</p>
+        <p :class="$style.documentId">{{ copy.document }} {{ example.id }}</p>
+        <h2 :id="`example-${example.id}`">
+          {{ copy.examples[example.id - 1].title }}
+        </h2>
+        <p>{{ copy.examples[example.id - 1].description }}</p>
       </header>
       <TextHighlighter
         :text="example.text"
@@ -137,6 +207,13 @@ if (markers) {
   margin-bottom: 8px;
 }
 
+.headerTopline {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .eyebrow,
 .documentId {
   margin-bottom: 8px;
@@ -145,6 +222,36 @@ if (markers) {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.languageSwitcher {
+  display: inline-flex;
+  padding: 3px;
+  background: rgb(15 23 42 / 45%);
+  border: 1px solid rgb(148 163 184 / 35%);
+  border-radius: 8px;
+}
+
+.languageButton {
+  min-width: 38px;
+  padding: 5px 8px;
+  color: inherit;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+}
+
+.languageButton:hover {
+  border-color: transparent;
+}
+
+.activeLanguage {
+  color: #0f172a;
+  background: #7dd3fc;
 }
 
 .notice {

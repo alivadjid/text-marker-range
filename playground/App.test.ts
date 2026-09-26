@@ -22,11 +22,26 @@ describe("playground highlight removal", () => {
     const wrapper = mount(App);
     await settle();
 
-    expect(wrapper.get("h1").text()).toBe("Три независимых документа");
+    expect(wrapper.get("h1").text()).toBe("Three independent documents");
     expect(wrapper.findAll("section")).toHaveLength(3);
     expect(wrapper.findAllComponents(TextDataKey)).toHaveLength(3);
     expect(wrapper.text()).toContain(
-      "Не начинайте выделение в одном документе и не заканчивайте в другом."
+      "Do not start a selection in one document and finish it in another."
+    );
+  });
+
+  it("switches playground copy to Russian without changing the lorem content", async () => {
+    const wrapper = mount(App);
+    await settle();
+
+    await wrapper.get('button[aria-label="Switch to Russian"]').trigger("click");
+
+    expect(wrapper.get("h1").text()).toBe("Три независимых документа");
+    expect(wrapper.text()).toContain(
+      "Nascetur ante himenaeos neque dui fusce"
+    );
+    expect(wrapper.get('button[aria-label="Переключить на русский"]').attributes("aria-pressed")).toBe(
+      "true"
     );
   });
 
