@@ -1,78 +1,122 @@
-# Highlighting text and save range.
+# vue-text-highlighter
 
-![package-example](https://github.com/alivadjid/text-marker-range/assets/52418132/b79fbd46-fa56-474b-8ecc-4f010a8723c5)
+A Vue 3 component for selecting text, assigning it a colour, and restoring the
+saved highlights later. Highlight positions are stored as character offsets in
+the source HTML's `textContent`, so the saved data is serializable and does not
+depend on the rendered highlight spans.
 
-## Install
+## Installation
 
+```sh
+pnpm add vue-text-highlighter
 ```
-npm i text-marker-range
-```
 
-## Props
+Vue is a peer dependency; install Vue 3 in the consuming application as usual.
 
-| Props   | Description    |
-| ------- | -------------- |
-| text    | any text       |
-| textId  | unique text id |
-| markers | saved markers  |
+## Vue 3 usage
 
-## Emit
-
-| Emit               | Description |
-| ------------------ | ----------- |
-| handleNewHighlight | NewMarker   |
-
-## Usage
-
-```javascript
+```vue
 <script setup lang="ts">
-  import { ref } from "vue";
-  import { TextKey } from "text-marker-range";
+import { ref } from "vue";
+import {
+  subtractMarkerRange,
+  TextHighlighter,
+  type Marker,
+  type MarkerRange,
+  type NewMarker,
+} from "vue-text-highlighter";
+import "vue-text-highlighter/style.css";
 
-  import type { NewMarker } from "text-marker-range";
+const article = "<p>Select any part of this <strong>HTML text</strong>.</p>";
+const highlights = ref<Marker[]>([]);
 
-  import "text-marker-range/style.css";
+function addHighlight(highlight: NewMarker) {
+  highlights.value.push({ ...highlight, id: crypto.randomUUID() });
+}
 
-  const storageName = "texthighlight";
+function removeHighlight(range: MarkerRange) {
+  highlights.value = subtractMarkerRange(highlights.value, range);
+}
+</script>
 
-  type savedHighlight = Required<NewMarker>;
-  const savedMarkers = ref<savedHighlight[]>([]);
-
-  import { loremThird } from "./fixture/index"; // any text
-
-  function handleNewHighlight(createdRange: NewMarker) {
-    const markers = getStorage();
-
-    if (markers) {
-      const parseHighlights = JSON.parse(markers);
-      parseHighlights.push({ ...createdRange, id: Date.now() });
-      setStorage(parseHighlights);
-    } else {
-      setStorage([{ ...createdRange, id: Date.now() }]);
-    }
-  }
-
-  function setStorage(item: NewMarker[]) {
-    localStorage.setItem(storageName, JSON.stringify(item));
-  }
-
-  function getStorage() {
-    return localStorage.getItem(storageName);
-  }
-
-  const markers = getStorage();
-
-  if (markers) {
-    savedMarkers.value = JSON.parse(markers);
-  }
-  </script>
-
-  <template>
-    <TextKey
-      :text="loremThird"
-      :textId="1"
-      :markers="savedMarkers"
-      @handleNewHighlight="handleNewHighlight"
-    />
-  </template>
+<template>
+  <TextHighlighter
+    :text="article"
+    :text-id="1"
+    :markers="highlights"
+    :colors="['#99f6e4', '#bae6fd', '#ddd6fe']"
+    @handle-new-highlight="addHighlight"
+    @handle-remove-highlight="removeHighlight"
+  />
+</template>
 ```
+
+## API
+
+### `TextHighlighter` props
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `text` | `string` | Source HTML to display and annotate. |
+| `textId` | `number` | Stable identifier of this document. |
+| `markers` | `readonly Marker[]` | Persisted highlights for this and other documents. |
+| `colors` | `readonly string[]` | Optional CSS colours shown in the picker. |
+
+### Events
+
+| Event | Payload | Description |
+| --- | --- | --- |
+| `handle-new-highlight` | `NewMarker` | Emitted after a user chooses a colour for a selection. Persist it with an `id`. |
+| `handle-remove-highlight` | `MarkerRange` | Emitted for the selected range to remove. |
+
+### Data types
+
+```ts
+type TextRange = { start: number; end: number };
+
+type NewMarker = {
+  textId: number;
+  color: string;
+  range: TextRange;
+};
+
+type Marker = NewMarker & { id: string | number };
+type MarkerRange = Pick<NewMarker, "textId" | "range">;
+```
+
+When highlights overlap, the last matching item in `markers` has visual
+priority. `subtractMarkerRange(markers, range)` returns a new marker list and
+does not mutate its inputs.
+
+## Compatibility
+
+This package is a **Vue 3 UI component**. It requires Vue 3 and a browser DOM;
+it is not directly usable as a React component or as a vanilla JavaScript
+widget. React and non-Vue applications would need a framework-specific adapter
+or a separate headless package. The stored `Marker` format can still be shared
+between such adapters.
+
+The package ships ESM, CommonJS, TypeScript declarations, and a separate CSS
+entry point. It targets modern browsers and Node.js 18+ for build tooling.
+
+## Security
+
+`text` is assigned as HTML. Sanitize untrusted content before passing it to the
+component.
+
+## Development and release checks
+
+```sh
+pnpm install
+pnpm dev
+pnpm check
+pnpm pack:check
+```
+
+`pnpm dev` starts the playground at `http://localhost:5173`. `pnpm check` runs
+type checks for the library and playground, the test suite, and the production
+build. `pnpm pack:check` previews the exact npm tarball.
+
+## License
+
+[MIT](./LICENSE)

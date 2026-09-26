@@ -2,31 +2,20 @@ import { MARKER_COLOR_LIST } from "@/constants";
 
 export type BookmarkColor = (typeof MARKER_COLOR_LIST)[number];
 
-export const enum ENodeName {
-  textNode = "#text",
-  spanNode = "SPAN",
-  imageNode = "IMG",
+export interface TextRange {
+  start: number;
+  end: number;
 }
 
-export interface NewMarker {
-  startKey?: string;
-  startTextIndex?: number;
-  endKey?: string;
-  endTextIndex?: number;
-  startOffset?: number;
-  endOffset?: number;
-  color?: string;
-  id?: number;
+export interface MarkerRange {
+  range: TextRange;
   textId: number;
 }
 
-export interface RangeObject {
-  startKey?: string;
-  endKey?: string;
+export interface NewMarker extends MarkerRange {
+  color: string;
+}
 
-  startTextIndex: number;
-  endTextIndex: number;
-
-  startOffset: number;
-  endOffset: number;
+export interface Marker extends NewMarker {
+  id: string | number;
 }
