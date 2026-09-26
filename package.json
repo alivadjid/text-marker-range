@@ -43,9 +43,10 @@
     "url": "git+https://github.com/alivadjid/text-marker-range.git"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode playground",
     "build": "pnpm types && vite build",
-    "preview": "vite preview",
+    "build:playground": "vite build --mode playground",
+    "preview": "vite preview --mode playground",
     "test": "vitest run",
     "types": "vue-tsc --noEmit",
     "types:playground": "vue-tsc --noEmit -p tsconfig.playground.json",

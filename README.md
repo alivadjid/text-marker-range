@@ -108,12 +108,14 @@ component.
 
 ```sh
 pnpm install
+pnpm dev
 pnpm check
 pnpm pack:check
 ```
 
-`pnpm check` runs type checks for the library and playground, the test suite,
-and the production build. `pnpm pack:check` previews the exact npm tarball.
+`pnpm dev` starts the playground at `http://localhost:5173`. `pnpm check` runs
+type checks for the library and playground, the test suite, and the production
+build. `pnpm pack:check` previews the exact npm tarball.
 
 ## License
 

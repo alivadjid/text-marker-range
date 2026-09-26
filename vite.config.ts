@@ -9,13 +9,15 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const playgroundRoot = path.resolve(projectRoot, "playground");
 
 export default defineConfig(({ command, mode }) => {
-  const isPlaygroundServer = command === "serve" && mode === "development";
+  const isPlayground = mode === "playground";
 
   return {
-    root: isPlaygroundServer ? playgroundRoot : projectRoot,
+    base:
+      mode === "playground" ? process.env.PAGES_BASE_PATH ?? "/" : "/",
+    root: isPlayground ? playgroundRoot : projectRoot,
     plugins: [
       vue(),
-      ...(command === "build"
+      ...(command === "build" && !isPlayground
         ? [
             dts({
               exclude: ["src/**/*.test.ts", "src/composables/**"],
@@ -30,11 +32,11 @@ export default defineConfig(({ command, mode }) => {
       },
     },
     server: {
-      port: 5000,
+      port: 5173,
       strictPort: true,
     },
     build:
-      command === "build"
+      command === "build" && !isPlayground
         ? {
             target: "es2022",
             cssCodeSplit: true,
