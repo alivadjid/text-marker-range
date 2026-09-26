@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to `vue-text-highlighter`.
+Thanks for contributing to `vue3-highlight-text-color`.
 
 ## Before opening a pull request
 

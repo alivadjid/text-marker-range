@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "vue-text-highlighter": path.resolve(__dirname, "src/index.ts"),
+      "vue3-highlight-text-color": path.resolve(__dirname, "src/index.ts"),
     },
   },
   test: {

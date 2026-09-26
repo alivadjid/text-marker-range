@@ -6,7 +6,7 @@ import {
   type Marker,
   type MarkerRange,
   type NewMarker,
-} from "vue-text-highlighter";
+} from "vue3-highlight-text-color";
 
 import { loremFirst, loremSecond, loremThird } from "./fixtures";
 

@@ -1,5 +1,5 @@
 {
-  "name": "vue-text-highlighter",
+  "name": "vue3-highlight-text-color",
   "version": "1.0.0",
   "description": "Vue 3 component for creating and restoring persistent text highlights.",
   "keywords": [
@@ -33,8 +33,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/vue-text-highlighter.js",
-      "require": "./dist/vue-text-highlighter.umd.cjs"
+      "import": "./dist/vue3-highlight-text-color.js",
+      "require": "./dist/vue3-highlight-text-color.umd.cjs"
     },
     "./style.css": "./dist/index.css"
   },
