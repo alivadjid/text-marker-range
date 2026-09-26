@@ -120,7 +120,7 @@ build. `pnpm pack:check` previews the exact npm tarball.
 
 ## Project resources
 
-- [Live playground](https://alivadjid.github.io/text-marker-range/)
+- [Live playground](https://alivadjid.github.io/vue3-highlight-text-color/)
 - [Contributing guide](./CONTRIBUTING.md)
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
 - [Security policy](./SECURITY.md)

@@ -11,8 +11,8 @@
     "annotations",
     "persistent-highlights"
   ],
-  "homepage": "https://github.com/alivadjid/text-marker-range",
-  "bugs": "https://github.com/alivadjid/text-marker-range/issues",
+  "homepage": "https://github.com/alivadjid/vue3-highlight-text-color",
+  "bugs": "https://github.com/alivadjid/vue3-highlight-text-color/issues",
   "license": "MIT",
   "author": {
     "name": "alivadjid",
@@ -40,7 +40,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alivadjid/text-marker-range.git"
+    "url": "git+https://github.com/alivadjid/vue3-highlight-text-color.git"
   },
   "scripts": {
     "dev": "vite --mode playground",
