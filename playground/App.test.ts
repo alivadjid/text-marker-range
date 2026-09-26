@@ -18,6 +18,18 @@ afterEach(() => {
 });
 
 describe("playground highlight removal", () => {
+  it("renders three explicitly independent text documents", async () => {
+    const wrapper = mount(App);
+    await settle();
+
+    expect(wrapper.get("h1").text()).toBe("Три независимых документа");
+    expect(wrapper.findAll("section")).toHaveLength(3);
+    expect(wrapper.findAllComponents(TextDataKey)).toHaveLength(3);
+    expect(wrapper.text()).toContain(
+      "Не начинайте выделение в одном документе и не заканчивайте в другом."
+    );
+  });
+
   it("removes persisted markers that intersect the selected range", async () => {
     localStorage.setItem(
       "texthighlight",
